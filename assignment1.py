@@ -1,7 +1,7 @@
 """
-Name:
-Date started:
-GitHub URL:
+Name: Yunsun Park
+Date started: 19_Dec_2023
+GitHub URL: https://github.com/yunsunpark12/Assignment_1
 """
 
 
