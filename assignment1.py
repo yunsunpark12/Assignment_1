@@ -95,11 +95,20 @@ def display_songs(songs):
         if songs[row][3] == 'r':
             print("{:2}. * {:40} - {:20} ({})".format(row + 1, title, artist, year))
             songs_to_learn += 1
-        else:
-            print("{:2}. {:40} - {:20} ({})".format(row + 1, title, artist, year))
+        elif songs[row][3] == 'c':
+            print("{:2}.   {:40} - {:20} ({})".format(row + 1, title, artist, year))
             songs_learned += 1
+        elif songs[row][3] == 'u':
+            print("{:2}. * {:40} - {:20} ({})".format(row + 1, title, artist, year))
+            songs_to_learn += 1
+        elif songs[row][3] == 'l':
+            print("{:2}.   {:40} - {:20} ({})".format(row + 1, title, artist, year))
+            songs_learned += 1
+        else:
+            print("Invalid status for song {}: {}".format(title, songs[row][3]))
 
     print("{} songs learned, {} songs still to learn.".format(songs_learned, songs_to_learn))
+
 
 def add_new_song():
     """Adding a new song to the program by asking for user input"""
