@@ -42,3 +42,12 @@ def main():
     print("Make some music!")
     file.close()
     quit()
+
+def display_menu():
+    """Display menu options, get user input and return the input"""
+
+    print("Menu: \n"
+          "D - Display songs\n"
+          "A - Add new song\n"
+          "C - Complete a song\n"
+          "Q - Quit")
