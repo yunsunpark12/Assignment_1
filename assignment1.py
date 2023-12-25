@@ -16,23 +16,24 @@ def main():
 
         print("Song List 1.0 - by Yunsun Park")
 
-        songs = [r.split(",") for r in [r for r in data.split("\n")]]   # converts string into 2D array
-        songs.pop(-1)                                                   # removes the empty string caused by \n from the list
+        songs = [r.split(",") for r in data.split("\n") if r.strip()]   # converts string into 2D array
+                                                                        # removes the empty string caused by \n from the list
         no_of_songs = len(songs)
         print("{} songs loaded.".format(no_of_songs))
         display_menu()
-
         # Determines which function to execute depending on the choice the user made
 
         choice = input('>>> ').upper()
-        while choice in {'D', 'A', 'C', 'Q', 'QUIT'}:
+        while True:
             if choice == 'D':
                 display_songs(songs)
             elif choice == 'A':
-                new_song = add_new_song()           # gets new song
-                songs.append(new_song)              # appends new songs to songs
+                new_song = add_new_song()  # gets new song
+                songs.append(new_song)  # appends new songs to songs
             elif choice == 'C':
                 check_to_mark_as_completed(songs)
+            elif choice == 'Q' or choice == 'QUIT':
+                break  # Exit the loop and proceed to save data
             else:
                 print("Invalid menu choice")
             display_menu()
@@ -50,7 +51,6 @@ def main():
 
         print("{} songs saved to {}".format(len(songs), file.name))
         print("Make some music!")
-        quit()
 
 def get_songs_status(no_of_songs, songs):
     """Adds the statuses of songs into a list"""
@@ -93,10 +93,10 @@ def display_songs(songs):
         year = songs[row][2]
 
         if songs[row][3] == 'r':
-            print("{:2}. * {} - {} ({})".format(row + 1, title, artist, year))
+            print("{:2}. * {:40} - {:20} ({})".format(row + 1, title, artist, year))
             songs_to_learn += 1
         else:
-            print("{:2}. {} - {} ({})".format(row + 1, title, artist, year))
+            print("{:2}. {:40} - {:20} ({})".format(row + 1, title, artist, year))
             songs_learned += 1
 
     print("{} songs learned, {} songs still to learn.".format(songs_learned, songs_to_learn))
@@ -166,11 +166,13 @@ def check_to_mark_as_completed(songs):
 
 
 def mark_as_completed(learned_song_no, songs):
-    """Marks the song user chose as completed."""
+    """Marks the song user chose as completed if it is not already completed."""
 
-    print("{} learned!".format(songs[learned_song_no - 1][0]))
-    songs[learned_song_no - 1].pop(3)         # removes 'r' from the list
-    songs[learned_song_no - 1].append('c')    # replaces 'r' with 'c' to mark as completed
+    if songs[learned_song_no - 1][3] == 'c':
+        print(f"You have already learned {songs[learned_song_no - 1][0]}")
+    else:
+        print("{} learned!".format(songs[learned_song_no - 1][0]))
+        songs[learned_song_no - 1][3] = 'c'  # Set the status to 'c' to mark as completed
 
 
 main()
