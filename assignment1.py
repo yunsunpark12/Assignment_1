@@ -146,32 +146,32 @@ def check_to_mark_as_completed(songs):
         check = False
         while check is not True:
             try:
-                int_completed_song_no = int(completed_song_no)  # converting string to integer
-                if completed_song_no <= 0:                  # if the user input is less than or equal to zero
+                int_learned_song_no = int(learned_song_no)  # converting string to integer
+                if learned_song_no <= 0:                  # if the user input is less than or equal to zero
                     print("Number must be > 0")
-                    completed_song_no = check_blank(">>>", "Invalid input; enter a valid number")
-                elif int_completed_song_no > no_of_songs:   # if the user input is greater than the number of songs the program hold
+                    learned_song_no = check_blank(">>>", "Invalid input; enter a valid number")
+                elif int_learned_song_no > no_of_songs:   # if the user input is greater than the number of songs the program hold
                     print("Invalid song number")
-                    completed_song_no = check_blank(">>>", "Invalid input; enter a valid number")
-                elif song_statuses[int_completed_song_no - 1] == 'c':  # if the song user chose is already completed ('c')
-                    print(f"You have already learned {songs[int_completed_song_no - 1]}")
+                    learned_song_no = check_blank(">>>", "Invalid input; enter a valid number")
+                elif song_statuses[int_learned_song_no - 1] == 'c':  # if the song user chose is already completed ('c')
+                    print(f"You have already learned {songs[int_learned_song_no - 1]}")
                     check = True                            # breaking from while loop
                 else:                                       # if the song user chose is not marked as completed
                     check = True                            # breaking from while loop
-                    mark_as_completed(int_completed_song_no, songs)  # go to mark_as_competed function to mark the song
+                    mark_as_completed(int_learned_song_no, songs)  # go to mark_as_competed function to mark the song
             except ValueError:
                 print("Invalid input; enter a valid number")
-                completed_song_no = check_blank(">>>", "Invalid input; enter a valid number")
+                learned_song_no = check_blank(">>>", "Invalid input; enter a valid number")
     else:  # if all the songs are completed learning
         print('No required songs!')
 
 
-def mark_as_completed(completed_song_no, songs):
+def mark_as_completed(learned_song_no, songs):
     """Marks the song user chose as completed."""
 
-    print("{} learned!".format(songs[completed_song_no - 1][0]))
-    songs[completed_song_no - 1].pop(3)         # removes 'r' from the list
-    songs[completed_song_no - 1].append('c')    # replaces 'r' with 'c' to mark as completed
+    print("{} learned!".format(songs[learned_song_no - 1][0]))
+    songs[learned_song_no - 1].pop(3)         # removes 'r' from the list
+    songs[learned_song_no - 1].append('c')    # replaces 'r' with 'c' to mark as completed
 
 
 main()
