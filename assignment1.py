@@ -102,5 +102,31 @@ def display_songs(songs):
 
     print("{} songs learned, {} songs still to learn.".format(songs_learned, songs_to_learn))
 
+def add_new_song():
+    """Adding a new song to the program by asking for user input"""
+
+    print("Enter details for a new song.")
+    new_song_title = check_blank('Title:', 'Input can not be blank')    # checking if the title is blank or not
+    new_artist = check_blank('Artist:', 'Input can not be blank')       # checking if the artist is blank or not
+
+    # Error checking for the 'Year' input
+    while True:
+        new_year = input('Year: ')
+        if not new_year:
+            print('Input can not be blank.')
+        elif not new_year.isdigit():
+            print('Invalid input; enter a valid number.')
+        elif int(new_year) <= 0:
+            print('Number must be > 0.')
+        else:
+            break
+
+    status = 'r'  # the newly added song is considered as required to learn ('r')
+
+    song_info = [new_song_title, new_artist, int(new_year), status]  # convert 'new_year' to an integer
+    print("{} by {} ({}) added to song list.".format(new_song_title, new_artist, new_year))
+
+    return song_info
+
 
 
