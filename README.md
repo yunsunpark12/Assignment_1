@@ -15,8 +15,8 @@ the `answer...` parts).
 
 1. How long did the entire project (assignment 1) take you?
 
-   > answer...
+   > answer...1 week
 
 2. What do you plan to do differently in your development process for assignment 2?
 
-   > answer...
+   > answer...Spend more time on coding. 
