@@ -11,50 +11,48 @@ def main():
     and quitting from the program by showing the number of songs saved in the program.
     """
 
-    file = open('songs.csv', 'r+')
-    data = file.read()
+    with open('songs.csv', 'r+') as file:
+        data = file.read()
 
-    print("Song List 1.0 - by Yunsun Park")
+        print("Song List 1.0 - by Yunsun Park")
 
-    songs = [r.split(",") for r in [r for r in data.split("\n")]]   # converts string into 2D array
-    songs.pop(-1)                                                   # removes the empty string caused by \n from the list
-    no_of_songs = len(songs)
-    print("{} songs loaded.".format(no_of_songs))
-    display_menu()
-
-    # Determines which function to execute depending on the choice the user made
-
-    choice = input('>>> ').upper()
-    while choice != 'Q':
-        if choice == 'D':
-            display_songs(songs)
-        elif choice == 'A':
-            new_song = add_new_song()           # gets new song
-            songs.append(new_song)              # appends new songs to songs
-        elif choice == 'C':
-            check_to_mark_as_completed(songs)
-        else:
-            print("Invalid menu choice")
+        songs = [r.split(",") for r in [r for r in data.split("\n")]]   # converts string into 2D array
+        songs.pop(-1)                                                   # removes the empty string caused by \n from the list
+        no_of_songs = len(songs)
+        print("{} songs loaded.".format(no_of_songs))
         display_menu()
+
+        # Determines which function to execute depending on the choice the user made
+
         choice = input('>>> ').upper()
+        while choice in {'D', 'A', 'C', 'Q', 'QUIT'}:
+            if choice == 'D':
+                display_songs(songs)
+            elif choice == 'A':
+                new_song = add_new_song()           # gets new song
+                songs.append(new_song)              # appends new songs to songs
+            elif choice == 'C':
+                check_to_mark_as_completed(songs)
+            else:
+                print("Invalid menu choice")
+            display_menu()
+            choice = input('>>> ').upper()
 
+        # Quit from program
+        file.seek(0)            # locates the pointer at the beginning of the file
+        file.truncate()         # clears everything in the file
+        for song in songs:      # loops for adding data
+            for index in song:
+                file.write(index)
+                if index != 'r' and index != 'c':
+                    file.write(',')
+            file.write('\n')
 
-    # Quit from program
-    file.seek(0)            # locates the pointer at the beginning of the file
-    file.truncate()         # clears everything in the file
-    for song in songs:      # loops for adding data
-        for index in song:
-            file.write(index)
-            if index != 'r' and index != 'c':
-                file.write(',')
-        file.write('\n')
+        print("{} songs saved to {}".format(len(songs), file.name))
+        print("Make some music!")
+        quit()
 
-    print("{} songs saved to {}".format(len(songs), file.name))
-    print("Make some music!")
-    file.close()
-    quit()
-
-def get_songs_status(no_of_songs,songs):
+def get_songs_status(no_of_songs, songs):
     """Adds the statuses of songs into a list"""
 
     songs_status = []
@@ -83,7 +81,7 @@ def check_blank(input_prompt, error_message):
     return text
 
 def display_songs(songs):
-    """List the songs the program has stored and number of songs required to learn when the user chose 'D' as
+    """List the songs the program has stored and the number of songs required to learn when the user chose 'D' as
     the menu option."""
     count = len(songs)
     songs_learned = 0
@@ -101,7 +99,7 @@ def display_songs(songs):
             print("{:2}. {} - {} ({})".format(row + 1, title, artist, year))
             songs_learned += 1
 
-        print("{} songs learned, {} songs still to learn.".format(songs_learned, songs_to_learn))
+    print("{} songs learned, {} songs still to learn.".format(songs_learned, songs_to_learn))
 
 def add_new_song():
     """Adding a new song to the program by asking for user input"""
@@ -132,36 +130,37 @@ def add_new_song():
 def check_to_mark_as_completed(songs):
     """
     Checks if the user input is blank and if the input has alphabets and special characters.
-    if the user input is less than or equal to 0,if the user input is greater than the number of songs
+    If the user input is less than or equal to 0, if the user input is greater than the number of songs
     the program has stored, or if the song user chose is already completed or not.
     """
 
     no_of_songs = len(songs)
-    song_statuses = get_song_status(no_of_songs, songs)  # getting the status of songs from get_songs_status function
+    song_statuses = get_songs_status(no_of_songs, songs)  # getting the status of songs from get_songs_status function
 
     if 'r' in song_statuses:                # if one or more songs are still required to learn
-        list_songs(songs)
+        display_songs(songs)
         print("Enter the number of a song to mark as learned")
         learned_song_no = check_blank(">>>", "Invalid input; enter a valid number")
         check = False
         while check is not True:
             try:
                 int_learned_song_no = int(learned_song_no)  # converting string to integer
-                if learned_song_no <= 0:                  # if the user input is less than or equal to zero
+                if int_learned_song_no <= 0:
                     print("Number must be > 0")
                     learned_song_no = check_blank(">>>", "Invalid input; enter a valid number")
-                elif int_learned_song_no > no_of_songs:   # if the user input is greater than the number of songs the program hold
+                elif int_learned_song_no > no_of_songs:
                     print("Invalid song number")
                     learned_song_no = check_blank(">>>", "Invalid input; enter a valid number")
-                elif song_statuses[int_learned_song_no - 1] == 'c':  # if the song user chose is already completed ('c')
-                    print(f"You have already learned {songs[int_learned_song_no - 1]}")
-                    check = True                            # breaking from while loop
-                else:                                       # if the song user chose is not marked as completed
-                    check = True                            # breaking from while loop
-                    mark_as_completed(int_learned_song_no, songs)  # go to mark_as_competed function to mark the song
+                elif song_statuses[int_learned_song_no - 1] == 'c':
+                    print(f"You have already learned {songs[int_learned_song_no - 1][0]}")
+                    check = True
+                else:
+                    check = True
+                    mark_as_completed(int_learned_song_no, songs)
             except ValueError:
                 print("Invalid input; enter a valid number")
                 learned_song_no = check_blank(">>>", "Invalid input; enter a valid number")
+
     else:  # if all the songs are completed learning
         print('No required songs!')
 
@@ -175,6 +174,3 @@ def mark_as_completed(learned_song_no, songs):
 
 
 main()
-
-
-
