@@ -90,18 +90,18 @@ def display_songs(songs):
     songs_to_learn = 0
 
     for row in range(count):
-        title = songs[row]["title"]
-        artist = songs[row]["artist"]
-        year = songs[row]["year"]
+        title = songs[row][0]
+        artist = songs[row][1]
+        year = songs[row][2]
 
-        if songs[row]["status"] == 'r':
+        if songs[row][3] == 'r':
             print("{:2}. * {} - {} ({})".format(row + 1, title, artist, year))
             songs_to_learn += 1
         else:
             print("{:2}. {} - {} ({})".format(row + 1, title, artist, year))
             songs_learned += 1
 
-    print("{} songs learned, {} songs still to learn.".format(songs_learned, songs_to_learn))
+        print("{} songs learned, {} songs still to learn.".format(songs_learned, songs_to_learn))
 
 def add_new_song():
     """Adding a new song to the program by asking for user input"""
