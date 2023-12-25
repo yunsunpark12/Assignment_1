@@ -37,11 +37,30 @@ def main():
         display_menu()
         choice = input('>>> ').upper()
 
+    # Quitting from program
+
+    file.seek(0)            # locating the pointer at the beginning of the file
+    file.truncate()         # clearing everything in the file
+    for song in songs:      # loop for adding data
+        for index in song:
+            file.write(index)
+            if index != '' and index != '':
+                file.write(',')
+        file.write('\n')
 
     print("{} songs saved to {}".format(len(songs), file.name))
     print("Make some music!")
     file.close()
     quit()
+
+def get_songs_status(no_of_songs,songs):
+    """Add the statuses of songs into a list"""
+
+    songs_status = []
+    for row in range(no_of_songs):
+        record = songs[row][3]
+        songs_status.append(record)
+    return songs_status
 
 def display_menu():
     """Display menu options, get user input and return the input"""
@@ -51,3 +70,37 @@ def display_menu():
           "A - Add new song\n"
           "C - Complete a song\n"
           "Q - Quit")
+
+def check_blank(input_prompt, error_message):
+    """Check if the input user made is blank"""
+
+    text = str(input("{} ".format(input_prompt)))
+    while text == '' or text == ' ':    # checking if the input is blank or not
+        print(error_message)
+        text = str(input("{} ".format(input_prompt)))
+
+    return text
+
+def display_songs(songs):
+    """List the songs the program has stored and number of songs required to learn when the user chose 'D' as
+    the menu option."""
+    count = len(songs)
+    songs_learned = 0
+    songs_to_learn = 0
+
+    for row in range(count):
+        title = songs[row]["title"]
+        artist = songs[row]["artist"]
+        year = songs[row]["year"]
+
+        if songs[row]["status"] == 'r':
+            print("{:2}. * {} - {} ({})".format(row + 1, title, artist, year))
+            songs_to_learn += 1
+        else:
+            print("{:2}. {} - {} ({})".format(row + 1, title, artist, year))
+            songs_learned += 1
+
+    print("{} songs learned, {} songs still to learn.".format(songs_learned, songs_to_learn))
+
+
+
